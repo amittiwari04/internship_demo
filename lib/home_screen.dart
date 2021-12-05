@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,24 +11,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
   var data;
   bool _isLoading = true;
   void getData() async {
-   final result = await http.get(Uri.parse(url));
+    final result = await http.get(Uri.parse(url));
     if (result.body.isNotEmpty) {
       data = json.decode(result.body);
       setState(() {
         _isLoading = false;
       });
-      log(json.decode(result.body));
     }
   }
 
   @override
   void initState() {
     getData();
-
     super.initState();
   }
 
@@ -45,14 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           : Container(
               child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(' ${data['clients'][index]["name"]} Hello'),
-                    );
-           }
-           )
-        ),
+                itemCount: data['clients'].length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(' ${data['clients'][index]["name"]}'),
+                    subtitle: Text(' ${data['clients'][index]["company"]}'),
+                  );
+                },
+              ),
+            ),
     );
   }
 }
